@@ -3,7 +3,7 @@ package main
 import ("fmt"
 		"os")
 
-func commandExit() error {
+func commandExit(cfg *config) error {
 	fmt.Print("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
@@ -12,7 +12,7 @@ func commandExit() error {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(cfg *config) error
 }
 
 var commands map[string]cliCommand
@@ -32,10 +32,14 @@ func initCommands() {
     }
 }
 
-func commandHelp() error {
+func commandHelp(cfg *config) error {
 	fmt.Print("Welcome to the Pokedex!\nUsage:\n")
 	for _, comm := range commands {
 		fmt.Printf("%s: %s\n", comm.name, comm.description)
 	}
 	return nil
+}
+
+type config struct {
+	chart map[string]cliCommand
 }
