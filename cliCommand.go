@@ -1,7 +1,9 @@
 package main
 
 import ("fmt"
-		"os")
+		"os"
+		"io"
+		"net/http")
 
 func commandExit(cfg *config) error {
 	fmt.Print("Closing the Pokedex... Goodbye!")
@@ -42,4 +44,27 @@ func commandHelp(cfg *config) error {
 
 type config struct {
 	chart map[string]cliCommand
+	next map[string]cliCommand
+	previous map[string]cliCommand
+}
+
+func commandMap (cfg *config) error {
+	res, err := http.Get("https://pokeapi.co/api/v2/location-area/{id or name}/")
+	if err != nil {
+		return fmt.Errorf("Error with Map Response: %v\n", err)
+	}
+	body, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	if res.StatusCode > 299 {
+		return fmt.Errorf("Unexpected Response Code: %v\n", res.StatusCode)
+	}
+	if err != nil {
+		return fmt.Errorf("Error with Body Response: %v\n", err)
+	}
+	return nil
+
+}
+
+func commandMapB (cfg *config) error {
+
 }
