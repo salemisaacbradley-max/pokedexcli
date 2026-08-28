@@ -43,13 +43,13 @@ func commandHelp(cfg *config) error {
 }
 
 type config struct {
-	chart map[string]cliCommand
-	next map[string]cliCommand
-	previous map[string]cliCommand
+	commands map[string]cliCommand
+	previousLocationURL *string
+	nextLocationURL *string
 }
 
 func commandMap (cfg *config) error {
-	res, err := http.Get("https://pokeapi.co/api/v2/location-area/{id or name}/")
+	res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
 	if err != nil {
 		return fmt.Errorf("Error with Map Response: %v\n", err)
 	}
