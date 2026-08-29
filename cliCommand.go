@@ -3,7 +3,8 @@ package main
 import ("fmt"
 		"os"
 		"io"
-		"net/http")
+		"net/http"
+		"encoding/json")
 
 func commandExit(cfg *config) error {
 	fmt.Print("Closing the Pokedex... Goodbye!")
@@ -31,6 +32,16 @@ func initCommands() {
 		description:"Displays a help message",
 		callback:	commandHelp,
 	},
+		"map": {
+		name: 		"map",
+		description:"Prints the next 20 locations",
+		callback:	commandMap,
+	},
+		"mapb": {
+		name:		"mapb",
+		description:"Prints the previous 20 locations",
+		callback:	commandMapB,
+	},
     }
 }
 
@@ -44,8 +55,16 @@ func commandHelp(cfg *config) error {
 
 type config struct {
 	commands map[string]cliCommand
+}
+
+type Location struct {
+	count int
 	previousLocationURL *string
 	nextLocationURL *string
+	Results []struct {
+		name string
+		URL string
+	}
 }
 
 func commandMap (cfg *config) error {
@@ -53,7 +72,9 @@ func commandMap (cfg *config) error {
 	if err != nil {
 		return fmt.Errorf("Error with Map Response: %v\n", err)
 	}
+	location := Location{}
 	body, err := io.ReadAll(res.Body)
+	err = json.Unmarshal(body, &location)
 	res.Body.Close()
 	if res.StatusCode > 299 {
 		return fmt.Errorf("Unexpected Response Code: %v\n", res.StatusCode)
@@ -66,5 +87,5 @@ func commandMap (cfg *config) error {
 }
 
 func commandMapB (cfg *config) error {
-
+	return nil
 }
