@@ -83,7 +83,6 @@ func commandMap (cfg *config) error {
 		return fmt.Errorf("Error with Body Response: %v\n", err)
 	}
 	return nil
-
 }
 
 func commandMapB (cfg *config) error {
