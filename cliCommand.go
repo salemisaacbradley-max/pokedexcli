@@ -55,20 +55,26 @@ func commandHelp(cfg *config) error {
 
 type config struct {
 	commands map[string]cliCommand
+	previousLocationURL *string
+	nextLocationURL *string
 }
 
 type Location struct {
-	count int
-	previousLocationURL *string
-	nextLocationURL *string
+	Count int
+	Next  *string
+	Previous *string
 	Results []struct {
-		name string
+		Name string
 		URL string
 	}
 }
 
 func commandMap (cfg *config) error {
-	res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
+	url := "https://pokeapi.co/api/v2/location-area/"
+	if cfg.nextLocationURL != nil {
+		url = *cfg.nextLocationURL
+	} 
+	res, err := http.Get(url)
 	if err != nil {
 		return fmt.Errorf("Error with Map Response: %v\n", err)
 	}
@@ -82,6 +88,11 @@ func commandMap (cfg *config) error {
 	if err != nil {
 		return fmt.Errorf("Error with Body Response: %v\n", err)
 	}
+	for _, i := range location.Results {
+		fmt.Println(i.Name)
+	}
+	cfg.nextLocationURL = location.Next
+	cfg.previousLocationURL = location.Previous
 	return nil
 }
 

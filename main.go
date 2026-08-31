@@ -3,6 +3,6 @@ package main
 
 
 func main() {
-	cfg := config{commands}
+	cfg := config{commands: commands,}
 	REPL(&cfg)
 }
