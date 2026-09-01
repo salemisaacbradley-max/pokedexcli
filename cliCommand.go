@@ -97,5 +97,28 @@ func commandMap (cfg *config) error {
 }
 
 func commandMapB (cfg *config) error {
+	url := "https://pokeapi.co/api/v2/location-area/"
+	if cfg.previousLocationURL != nil {
+		url = *cfg.previousLocationURL
+	} 
+	res, err := http.Get(url)
+	if err != nil {
+		return fmt.Errorf("Error with Map Response: %v\n", err)
+	}
+	location := Location{}
+	body, err := io.ReadAll(res.Body)
+	err = json.Unmarshal(body, &location)
+	res.Body.Close()
+	if res.StatusCode > 299 {
+		return fmt.Errorf("Unexpected Response Code: %v\n", res.StatusCode)
+	}
+	if err != nil {
+		return fmt.Errorf("Error with Body Response: %v\n", err)
+	}
+	for _, i := range location.Results {
+		fmt.Println(i.Name)
+	}
+	cfg.previousLocationURL = location.Next
+	cfg.nextLocationURL = location.Previous
 	return nil
 }
