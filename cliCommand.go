@@ -98,9 +98,9 @@ func commandMap (cfg *config) error {
 
 func commandMapB (cfg *config) error {
 	url := "https://pokeapi.co/api/v2/location-area/"
-	if cfg.previousLocationURL != nil {
-		url = *cfg.previousLocationURL
-	} 
+	if cfg.previousLocationURL == nil {
+		fmt.Println("you're on the first page")
+	} else {
 	res, err := http.Get(url)
 	if err != nil {
 		return fmt.Errorf("Error with Map Response: %v\n", err)
@@ -118,7 +118,7 @@ func commandMapB (cfg *config) error {
 	for _, i := range location.Results {
 		fmt.Println(i.Name)
 	}
-	cfg.previousLocationURL = location.Next
-	cfg.nextLocationURL = location.Previous
+	cfg.previousLocationURL = location.Previous
+	cfg.nextLocationURL = location.Next}
 	return nil
 }
