@@ -57,6 +57,7 @@ type config struct {
 	commands map[string]cliCommand
 	previousLocationURL *string
 	nextLocationURL *string
+	pokeCache 
 }
 
 type Location struct {
@@ -74,20 +75,7 @@ func commandMap (cfg *config) error {
 	if cfg.nextLocationURL != nil {
 		url = *cfg.nextLocationURL
 	} 
-	res, err := http.Get(url)
-	if err != nil {
-		return fmt.Errorf("Error with Map Response: %v\n", err)
-	}
-	location := Location{}
-	body, err := io.ReadAll(res.Body)
 	err = json.Unmarshal(body, &location)
-	res.Body.Close()
-	if res.StatusCode > 299 {
-		return fmt.Errorf("Unexpected Response Code: %v\n", res.StatusCode)
-	}
-	if err != nil {
-		return fmt.Errorf("Error with Body Response: %v\n", err)
-	}
 	for _, i := range location.Results {
 		fmt.Println(i.Name)
 	}
@@ -101,24 +89,33 @@ func commandMapB (cfg *config) error {
 	if cfg.previousLocationURL == nil {
 		fmt.Println("you're on the first page")
 	} else {
-	res, err := http.Get(url)
-	if err != nil {
-		return fmt.Errorf("Error with Map Response: %v\n", err)
 	}
-	location := Location{}
-	body, err := io.ReadAll(res.Body)
 	err = json.Unmarshal(body, &location)
-	res.Body.Close()
-	if res.StatusCode > 299 {
-		return fmt.Errorf("Unexpected Response Code: %v\n", res.StatusCode)
-	}
-	if err != nil {
-		return fmt.Errorf("Error with Body Response: %v\n", err)
-	}
 	for _, i := range location.Results {
 		fmt.Println(i.Name)
 	}
 	cfg.previousLocationURL = location.Previous
 	cfg.nextLocationURL = location.Next}
 	return nil
+}
+
+func processBytes (url string) ([]byte, error) {
+	res, err := http.Get(url)
+	if err != nil {
+		return nil, fmt.Errorf("Error with Map Response: %v\n", err)
+	}
+	location := Location{}
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, fmt.Errorf("Error retrieving body: %v\n", err)
+	}
+	
+	res.Body.Close()
+	if res.StatusCode > 299 {
+		return nil, fmt.Errorf("Unexpected Response Code: %v\n", res.StatusCode)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("Error with Body Response: %v\n", err)
+	}
+	return body, nil
 }
