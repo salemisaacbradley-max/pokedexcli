@@ -13,8 +13,9 @@ type Cache struct {
 }
 
 func NewCache () {
-
-	cleanedCache := reapLoop()
+	if 
+	newCache := Cache{}
+	go reapLoop(5*time.Second)
 
 }
 
