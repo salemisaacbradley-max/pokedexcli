@@ -57,7 +57,7 @@ type config struct {
 	commands map[string]cliCommand
 	previousLocationURL *string
 	nextLocationURL *string
-	pokeCache 
+	pokecache Cache
 }
 
 type Location struct {
@@ -99,7 +99,9 @@ func commandMapB (cfg *config) error {
 	return nil
 }
 
-func processBytes (url string) ([]byte, error) {
+func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
+	
+	.Get(url)
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("Error with Map Response: %v\n", err)
