@@ -101,7 +101,7 @@ func commandMapB (cfg *config) error {
 
 func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
 	
-	.Get(url)
+	cache.Get(url)
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("Error with Map Response: %v\n", err)
