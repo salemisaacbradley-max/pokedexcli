@@ -4,7 +4,8 @@ import ("fmt"
 		"os"
 		"io"
 		"net/http"
-		"encoding/json")
+		"encoding/json"
+		"time")
 
 func commandExit(cfg *config) error {
 	fmt.Print("Closing the Pokedex... Goodbye!")
@@ -100,13 +101,13 @@ func commandMapB (cfg *config) error {
 }
 
 func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
-	
-	cache.Get(url)
+	if data, ok := cache.Get(url); ok {
+		return data, nil
+	}
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("Error with Map Response: %v\n", err)
 	}
-	location := Location{}
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, fmt.Errorf("Error retrieving body: %v\n", err)
@@ -116,8 +117,6 @@ func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
 	if res.StatusCode > 299 {
 		return nil, fmt.Errorf("Unexpected Response Code: %v\n", res.StatusCode)
 	}
-	if err != nil {
-		return nil, fmt.Errorf("Error with Body Response: %v\n", err)
-	}
+	cache.Add(url, body)
 	return body, nil
 }
