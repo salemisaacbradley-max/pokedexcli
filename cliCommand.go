@@ -76,6 +76,7 @@ func commandMap (cfg *config) error {
 	if cfg.nextLocationURL != nil {
 		url = *cfg.nextLocationURL
 	} 
+	body := processBytes()
 	err = json.Unmarshal(body, &location)
 	for _, i := range location.Results {
 		fmt.Println(i.Name)
