@@ -76,8 +76,15 @@ func commandMap (cfg *config) error {
 	if cfg.nextLocationURL != nil {
 		url = *cfg.nextLocationURL
 	} 
-	body := processBytes()
+	body, err := processBytes(cfg.pokecache, url)
+	if err != nil {
+		return fmt.Errorf("Error: %v", err)
+	}
+	location := Location{}
 	err = json.Unmarshal(body, &location)
+	if err != nil {
+		return fmt.Errorf("Error: %v", err)
+	}
 	for _, i := range location.Results {
 		fmt.Println(i.Name)
 	}
