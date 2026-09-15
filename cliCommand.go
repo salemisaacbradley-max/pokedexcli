@@ -97,14 +97,24 @@ func commandMapB (cfg *config) error {
 	url := "https://pokeapi.co/api/v2/location-area/"
 	if cfg.previousLocationURL == nil {
 		fmt.Println("you're on the first page")
+		return nil
 	} else {
+		url = *cfg.previousLocationURL 
 	}
+	body, err := processBytes(cfg.pokecache, url)
+	if err != nil {
+		return fmt.Errorf("Error: %v", err)
+	}
+	location := Location{}
 	err = json.Unmarshal(body, &location)
+	if err != nil {
+    	return fmt.Errorf("Error: %v", err)
+	}
 	for _, i := range location.Results {
 		fmt.Println(i.Name)
 	}
 	cfg.previousLocationURL = location.Previous
-	cfg.nextLocationURL = location.Next}
+	cfg.nextLocationURL = location.Next
 	return nil
 }
 
