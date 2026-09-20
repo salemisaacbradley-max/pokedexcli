@@ -5,7 +5,7 @@ import ("fmt"
 		"io"
 		"net/http"
 		"encoding/json"
-		"time")
+		"github.com/salemisaacbradley-max/pokedexcli/internal/pokecache")
 
 func commandExit(cfg *config) error {
 	fmt.Print("Closing the Pokedex... Goodbye!")
@@ -58,7 +58,7 @@ type config struct {
 	commands map[string]cliCommand
 	previousLocationURL *string
 	nextLocationURL *string
-	pokecache Cache
+	pokecache pokecache.Cache
 }
 
 type Location struct {

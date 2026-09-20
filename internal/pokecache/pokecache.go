@@ -6,15 +6,18 @@ import ("sync"
 type Cache struct {
 	mu sync.Mutex
 	cache map[string]cacheEntry
-	cacheEntry struct{
-		createdAt time.Time
-		val []byte
-	}
+	
 }
+
+type cacheEntry struct {
+	createdAt time.Time
+	val []byte
+}
+
 
 func NewCache () {
 	newCache := Cache{}
-	go reapLoop(5*time.Second)
+	go newCache.reapLoop(5*time.Second)
 
 }
 
@@ -30,14 +33,14 @@ func (c *Cache) Add(key string, val []byte) {
 	c.cache[key] = cacheEntry{t, val}
 }
 
-func (c *Cache) Get(key string) []byte, bool {
+func (c *Cache) Get(key string) ([]byte, bool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	val, ok := c.cache[key]
+	value, ok := c.cache[key]
 	if ok != true {
 		return nil, ok
 	} else {
-		return val, ok
+		return value.val, ok
 	}
 }
 
