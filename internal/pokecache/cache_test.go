@@ -1,6 +1,8 @@
 package pokecache
 
-import "testing"
+import ("testing"
+		"fmt"
+		"time")
 
 func TestCache (t *testing.T) {
 	cases := []struct {
@@ -18,7 +20,8 @@ func TestCache (t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Test case %v", i), func(t *testing.T) {
-			cache := NewCache(interval)
+			interval := 5* time.Second
+			cache := NewCache()
 			cache.Add(c.key, c.val)
 			val, ok := cache.Get(c.key)
 			if !ok {
@@ -36,7 +39,7 @@ func TestCache (t *testing.T) {
 func TestReapLoop(t *testing.T) {
 	const baseTime = 5 * time.Millisecond
 	const waitTime = baseTime + 5*time.Millisecond
-	cache := NewCache(baseTime)
+	cache := NewCache()
 	cache.Add("https://example.com", []byte("testdata"))
 
 	_, ok := cache.Get("https://example.com")
