@@ -10,8 +10,8 @@ func TestCache (t *testing.T) {
 		expected []string
 	}{
 		{
-			key: "https://example.com",
-			val: []byte("testdata"),
+			c.key: "https://example.com",
+			c.val: []byte("testdata"),
 		},
 		{
 			key: "https://example.com/path",
