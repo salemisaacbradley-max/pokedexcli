@@ -10,25 +10,25 @@ func TestCache (t *testing.T) {
 		expected []string
 	}{
 		{
-			c.key: "https://example.com",
-			c.val: []byte("testdata"),
+			input: "https://example.com",
+			expected: []byte("testdata"),
 		},
 		{
-			key: "https://example.com/path",
-			val: []byte("moretestdata"),
+			input: "https://example.com/path",
+			expected: []byte("moretestdata"),
 		},
 	}
-	for i, c := range cases {
+	for i, _ := range cases {
 		t.Run(fmt.Sprintf("Test case %v", i), func(t *testing.T) {
-			interval := 5* time.Second
+			//interval := 5* time.Second
 			cache := NewCache()
-			cache.Add(c.key, c.val)
-			val, ok := cache.Get(c.key)
+			cache.Add(input, expected)
+			val, ok := cache.Get(input)
 			if !ok {
 				t.Errorf("expected to find key")
 				return
 			}
-			if string(val) != string(c.val) {
+			if string(val) != string(expected) {
 				t.Errorf("expected to find value")
 				return
 			}

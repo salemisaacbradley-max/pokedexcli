@@ -15,10 +15,10 @@ type cacheEntry struct {
 }
 
 
-func NewCache () {
+func NewCache (interval time.Duration) Cache {
 	newCache := Cache{}
-	go newCache.reapLoop(5*time.Second)
-
+	go newCache.reapLoop(interval)
+	return newCache
 }
 
 type Ticker struct {
