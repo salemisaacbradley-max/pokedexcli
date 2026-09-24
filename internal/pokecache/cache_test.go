@@ -7,7 +7,7 @@ import ("testing"
 func TestCache (t *testing.T) {
 	cases := []struct {
 		input    string
-		expected []string
+		expected []byte
 	}{
 		{
 			input: "https://example.com",
