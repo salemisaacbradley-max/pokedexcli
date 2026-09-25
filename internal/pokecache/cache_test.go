@@ -18,17 +18,17 @@ func TestCache (t *testing.T) {
 			expected: []byte("moretestdata"),
 		},
 	}
-	for i, _ := range cases {
+	for i, c := range cases {
 		t.Run(fmt.Sprintf("Test case %v", i), func(t *testing.T) {
-			//interval := 5* time.Second
-			cache := NewCache()
-			cache.Add(input, expected)
-			val, ok := cache.Get(input)
+			interval := 5* time.Second
+			cache := NewCache(interval)
+			cache.Add(c.input, c.expected)
+			val, ok := cache.Get(c.input)
 			if !ok {
 				t.Errorf("expected to find key")
 				return
 			}
-			if string(val) != string(expected) {
+			if string(val) != string(c.expected) {
 				t.Errorf("expected to find value")
 				return
 			}
@@ -39,7 +39,7 @@ func TestCache (t *testing.T) {
 func TestReapLoop(t *testing.T) {
 	const baseTime = 5 * time.Millisecond
 	const waitTime = baseTime + 5*time.Millisecond
-	cache := NewCache()
+	cache := NewCache(5 * time.Second)
 	cache.Add("https://example.com", []byte("testdata"))
 
 	_, ok := cache.Get("https://example.com")
