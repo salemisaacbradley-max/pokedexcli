@@ -43,6 +43,11 @@ func initCommands() {
 		description:"Prints the previous 20 locations",
 		callback:	commandMapB,
 	},
+		"explore": {
+		name:		"explore",
+		description:"Prints the Pokemon found in this region",
+		callback:	explore
+		}
     }
 }
 
