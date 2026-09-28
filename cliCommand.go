@@ -46,8 +46,8 @@ func initCommands() {
 		"explore": {
 		name:		"explore",
 		description:"Prints the Pokemon found in this region",
-		callback:	explore
-		}
+		callback:	explore,
+	},
     }
 }
 
@@ -143,3 +143,5 @@ func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
 	cache.Add(url, body)
 	return body, nil
 }
+
+func commandExplore (cfg config, route Location.Results.Name) 
