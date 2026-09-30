@@ -75,7 +75,7 @@ type Location struct {
 		URL string
 	}
 }
-
+//Map lists 20 locations, upon further commands, lists the next 20
 func commandMap (cfg *config) error {
 	url := "https://pokeapi.co/api/v2/location-area/"
 	if cfg.nextLocationURL != nil {
@@ -97,7 +97,7 @@ func commandMap (cfg *config) error {
 	cfg.previousLocationURL = location.Previous
 	return nil
 }
-
+//Command Map B goes back a page
 func commandMapB (cfg *config) error {
 	url := "https://pokeapi.co/api/v2/location-area/"
 	if cfg.previousLocationURL == nil {
@@ -122,7 +122,7 @@ func commandMapB (cfg *config) error {
 	cfg.nextLocationURL = location.Next
 	return nil
 }
-
+// Process Bytes turns a url into json and then go
 func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
 	if data, ok := cache.Get(url); ok {
 		return data, nil
@@ -144,7 +144,9 @@ func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
 	return body, nil
 }
 
-func commandExplore (cfg config, route Location.Results.Name) 
+func commandExplore (cfg config, route Location.Results.Name) {
+
+}
 
 type EncounterType struct {
 	ID                   int    `json:"id"`
