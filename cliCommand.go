@@ -200,3 +200,4 @@ type EncounterType struct {
 		} `json:"version_details"`
 	} `json:"pokemon_encounters"`
 }
+
