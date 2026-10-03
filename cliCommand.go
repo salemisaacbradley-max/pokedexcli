@@ -76,7 +76,7 @@ type Location struct {
 	}
 }
 //Map lists 20 locations, upon further commands, lists the next 20
-func commandMap (cfg *config) error {
+func commandMap (cfg *config, unused string) error {
 	url := "https://pokeapi.co/api/v2/location-area/"
 	if cfg.nextLocationURL != nil {
 		url = *cfg.nextLocationURL
@@ -98,7 +98,7 @@ func commandMap (cfg *config) error {
 	return nil
 }
 //Command Map B goes back a page
-func commandMapB (cfg *config) error {
+func commandMapB (cfg *config, unused string) error {
 	url := "https://pokeapi.co/api/v2/location-area/"
 	if cfg.previousLocationURL == nil {
 		fmt.Println("you're on the first page")
