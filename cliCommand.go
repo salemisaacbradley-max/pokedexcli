@@ -144,7 +144,7 @@ func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
 	return body, nil
 }
 
-func commandExplore (cfg config, route Location.Results.Name) {
+func commandExplore (cfg *config, route string) error {
 
 }
 
