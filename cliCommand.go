@@ -147,8 +147,10 @@ func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
 func commandExplore (cfg *config, route string) error {
 	if route == nil (
 		return fmt.Error("No route specified")
+	) else (
+		
 	)
-	
+
 }
 
 type EncounterType struct {
