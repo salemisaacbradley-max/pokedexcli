@@ -148,7 +148,9 @@ func commandExplore (cfg *config, route string) error {
 	if route == nil (
 		return fmt.Error("No route specified")
 	) else (
-		
+		if cfg.pokecache == nil (
+			cache = Cache{}
+		)
 	)
 
 }
