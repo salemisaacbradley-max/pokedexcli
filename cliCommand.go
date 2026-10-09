@@ -5,7 +5,8 @@ import ("fmt"
 		"io"
 		"net/http"
 		"encoding/json"
-		"github.com/salemisaacbradley-max/pokedexcli/internal/pokecache")
+		"github.com/salemisaacbradley-max/pokedexcli/internal/pokecache"
+		"time")
 
 func commandExit(cfg *config) error {
 	fmt.Print("Closing the Pokedex... Goodbye!")
@@ -149,7 +150,7 @@ func commandExplore (cfg *config, route string) error {
 		return fmt.Error("No route specified")
 	) else (
 		if cfg.pokecache == nil (
-			cache = Cache{}
+			cache = NewCache(5 * time.Second)
 		)
 	)
 
