@@ -146,14 +146,17 @@ func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
 }
 
 func commandExplore (cfg *config, route string) error {
-	if route == nil (
-		return fmt.Error("No route specified")
-	) else (
-		if cfg.pokecache == nil (
-			cache = NewCache(5 * time.Second)
-		)
-	)
-
+	if route == "" {
+		return fmt.Errorf("No route specified")
+	 } else {
+		if cfg.pokecache == cache{} {
+			cache := pokecache.NewCache(5 * time.Second)
+		}
+		for _, pkmn := range route {
+			fmt.Println(pkmn.Name)
+		}
+	 }
+	return nil
 }
 
 type EncounterType struct {
