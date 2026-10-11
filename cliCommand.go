@@ -149,10 +149,12 @@ func commandExplore (cfg *config, route string) error {
 	if route == "" {
 		return fmt.Errorf("No route specified")
 	 } else {
-		if cfg.pokecache == cache{} {
-			cache := pokecache.NewCache(5 * time.Second)
+		if cfg.pokecache == nil {
+			cfg.pokecache := pokecache.NewCache(5 * time.Second)
 		}
-		for _, pkmn := range route {
+		bite, err := processBytes(cfg.pokecache, route)
+		for pkmn, _ := range route {
+			
 			fmt.Println(pkmn.Name)
 		}
 	 }
