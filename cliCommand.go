@@ -124,7 +124,13 @@ func commandMapB (cfg *config, unused string) error {
 	return nil
 }
 // Process Bytes turns a url into json and then go
-func processBytes (cache pokecache.Cache, url string) ([]byte, error) {
+func processBytes (cache pokecache.Cache, twine string) ([]byte, error) {
+	//if twine doesn't containc a full url, make it a full url
+	if twine {
+		url := "https://pokeapi.co/api/v2/location-area/" + twine + "/"
+	} else {
+		url := twine
+	}
 	if data, ok := cache.Get(url); ok {
 		return data, nil
 	}
@@ -150,16 +156,20 @@ func commandExplore (cfg *config, route string) error {
 		return fmt.Errorf("No route specified")
 	 } else {
 		if cfg.pokecache == nil {
-			cfg.pokecache := pokecache.NewCache(5 * time.Second)
+			cfg.pokecache = pokecache.NewCache(5 * time.Second)
+			bite, err := processBytes(cfg.pokecache, route)
+			err != nil {
+				return fmt.Errorf(err)
+			}
+			}
 		}
-		bite, err := processBytes(cfg.pokecache, route)
-		for pkmn, _ := range route {
+		for pkmn, _ := range bite {
 			
 			fmt.Println(pkmn.Name)
 		}
-	 }
 	return nil
-}
+	}
+
 
 type EncounterType struct {
 	ID                   int    `json:"id"`
