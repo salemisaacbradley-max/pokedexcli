@@ -6,7 +6,8 @@ import ("fmt"
 		"net/http"
 		"encoding/json"
 		"github.com/salemisaacbradley-max/pokedexcli/internal/pokecache"
-		"time")
+		"time"
+		"strings")
 
 func commandExit(cfg *config) error {
 	fmt.Print("Closing the Pokedex... Goodbye!")
@@ -126,7 +127,7 @@ func commandMapB (cfg *config, unused string) error {
 // Process Bytes turns a url into json and then go
 func processBytes (cache pokecache.Cache, twine string) ([]byte, error) {
 	//if twine doesn't containc a full url, make it a full url
-	if twine {
+	if strings.HasPrefix(twine, "https") == false {
 		url := "https://pokeapi.co/api/v2/location-area/" + twine + "/"
 	} else {
 		url := twine
