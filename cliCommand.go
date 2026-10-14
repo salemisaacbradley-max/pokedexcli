@@ -9,7 +9,7 @@ import ("fmt"
 		"time"
 		"strings")
 
-func commandExit(cfg *config) error {
+func commandExit(cfg *config, usused string) error {
 	fmt.Print("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
@@ -18,7 +18,7 @@ func commandExit(cfg *config) error {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(cfg *config) error
+	callback    func(cfg *config, optional string) error
 }
 
 var commands map[string]cliCommand
@@ -48,12 +48,12 @@ func initCommands() {
 		"explore": {
 		name:		"explore",
 		description:"Prints the Pokemon found in this region",
-		callback:	explore,
+		callback:	commandExplore,
 	},
     }
 }
 
-func commandHelp(cfg *config) error {
+func commandHelp(cfg *config, unused string) error {
 	fmt.Print("Welcome to the Pokedex!\nUsage:\n")
 	for _, comm := range commands {
 		fmt.Printf("%s: %s\n", comm.name, comm.description)
@@ -65,7 +65,7 @@ type config struct {
 	commands map[string]cliCommand
 	previousLocationURL *string
 	nextLocationURL *string
-	pokecache pokecache.Cache
+	pokecache *pokecache.Cache
 }
 
 type Location struct {
@@ -83,7 +83,7 @@ func commandMap (cfg *config, unused string) error {
 	if cfg.nextLocationURL != nil {
 		url = *cfg.nextLocationURL
 	} 
-	body, err := processBytes(cfg.pokecache, url)
+	body, err := processBytes(*cfg.pokecache, url)
 	if err != nil {
 		return fmt.Errorf("Error: %v", err)
 	}
@@ -108,7 +108,7 @@ func commandMapB (cfg *config, unused string) error {
 	} else {
 		url = *cfg.previousLocationURL 
 	}
-	body, err := processBytes(cfg.pokecache, url)
+	body, err := processBytes(*cfg.pokecache, url)
 	if err != nil {
 		return fmt.Errorf("Error: %v", err)
 	}
@@ -127,10 +127,12 @@ func commandMapB (cfg *config, unused string) error {
 // Process Bytes turns a url into json and then go
 func processBytes (cache pokecache.Cache, twine string) ([]byte, error) {
 	//if twine doesn't containc a full url, make it a full url
+	url := ""
 	if strings.HasPrefix(twine, "https") == false {
-		url := "https://pokeapi.co/api/v2/location-area/" + twine + "/"
+		url = "https://pokeapi.co/api/v2/location-area/" + twine + "/"
+		
 	} else {
-		url := twine
+		url = twine
 	}
 	if data, ok := cache.Get(url); ok {
 		return data, nil
@@ -155,21 +157,26 @@ func processBytes (cache pokecache.Cache, twine string) ([]byte, error) {
 func commandExplore (cfg *config, route string) error {
 	if route == "" {
 		return fmt.Errorf("No route specified")
-	 } else {
+	} else {
 		if cfg.pokecache == nil {
 			cfg.pokecache = pokecache.NewCache(5 * time.Second)
-			bite, err := processBytes(cfg.pokecache, route)
-			err != nil {
-				return fmt.Errorf(err)
 			}
-			}
+		bite, err := processBytes(*cfg.pokecache, route)
+		if err != nil {
+			return err
 		}
-		for pkmn, _ := range bite {
-			
-			fmt.Println(pkmn.Name)
+		encounterType := EncounterType{}
+		err = json.Unmarshal(bite, &encounterType)
+		if err != nil {
+			return err
 		}
-	return nil
+	
+		for _, pkmn := range encounterType.PokemonEncounters {	
+			fmt.Println(pkmn.Pokemon.Name)
+		}
 	}
+return nil
+}
 
 
 type EncounterType struct {

@@ -26,8 +26,12 @@ func REPL(cfg *config) {
 			continue
 		}
 		command, ok := commands[cleaned[0]]
+		var confirmed string
+		if len(cleaned) >= 2 {
+			confirmed = cleaned[1]
+		}
 		if ok == true {
-			command.callback(cfg)
+			command.callback(cfg, confirmed)
 		} else {
 			fmt.Print("Unknown Command\n")
 		}
