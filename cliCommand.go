@@ -185,9 +185,13 @@ return nil
 }
 
 func commandCatch (cfg *config, pokemon string) error {
-	if pokemon 
+	:= 
+	if res.StatusCode == 404 {
+		return Errorf("%s was not in the database. Check your spelling and try again.", value)
+	}
 	fmt.Printf("Throwing a pokeball at %s", pokemon)
-	rand.
+
+	rand.Intn()
 }
 
 
