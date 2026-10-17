@@ -190,8 +190,10 @@ func commandCatch (cfg *config, pokemon string) error {
 		return Errorf("%s was not in the database. Check your spelling and try again.", value)
 	}
 	fmt.Printf("Throwing a pokeball at %s", pokemon)
-
-	rand.Intn()
+ 	catchChance := rand.Intn() * 	
+	if catchChance >= 1 {
+		
+	}
 }
 
 
