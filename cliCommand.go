@@ -6,6 +6,7 @@ import ("fmt"
 		"net/http"
 		"encoding/json"
 		"github.com/salemisaacbradley-max/pokedexcli/internal/pokecache"
+		"github.com/salemisaacbradley-max/pokedexcli/internal/pokemon_get"
 		"time"
 		"strings"
 		"math/rand")
@@ -185,10 +186,7 @@ return nil
 }
 
 func commandCatch (cfg *config, pokemon string) error {
-	res := 
-	if res.StatusCode == 404 {
-		return Errorf("%s was not in the database. Check your spelling and try again.", value)
-	}
+	err := GetPokemon
 	fmt.Printf("Throwing a pokeball at %s", pokemon)
  	catchChance := rand.Intn() * pokemon.BaseExperience	
 	if catchChance >= 10 {
