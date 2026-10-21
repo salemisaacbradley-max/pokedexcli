@@ -17,7 +17,6 @@ func GetPokemon (pokemon string) error {
 	if err != nil {
 		return nil, fmt.Errorf("Error retrieving body: %v\n", err)
 	}
-	
 	res.Body.Close()
 	if res.StatusCode > 299 {
 		return nil, fmt.Errorf("Unexpected Response Code: %v\n", res.StatusCode)
