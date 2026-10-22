@@ -90,7 +90,7 @@ func commandMap (cfg *config, unused string) error {
 	if cfg.nextLocationURL != nil {
 		url = *cfg.nextLocationURL
 	} 
-	body, err := processBytes(*cfg.pokecache, url)
+	body, err := processBytes(*cfg.pokecache, url, "location-area")
 	if err != nil {
 		return fmt.Errorf("Error: %v", err)
 	}
@@ -115,7 +115,7 @@ func commandMapB (cfg *config, unused string) error {
 	} else {
 		url = *cfg.previousLocationURL 
 	}
-	body, err := processBytes(*cfg.pokecache, url)
+	body, err := processBytes(*cfg.pokecache, url, "location-area")
 	if err != nil {
 		return fmt.Errorf("Error: %v", err)
 	}
@@ -132,11 +132,11 @@ func commandMapB (cfg *config, unused string) error {
 	return nil
 }
 // Process Bytes turns a url into json and then go
-func processBytes (cache pokecache.Cache, twine string) ([]byte, error) {
+func processBytes (cache pokecache.Cache, twine string, endpoint string) ([]byte, error) {
 	//if twine doesn't containc a full url, make it a full url
 	url := ""
 	if strings.HasPrefix(twine, "https") == false {
-		url = "https://pokeapi.co/api/v2/location-area/" + twine + "/"
+		url = "https://pokeapi.co/api/v2/" + endpoint + "/" + twine + "/"
 		
 	} else {
 		url = twine
@@ -168,7 +168,7 @@ func commandExplore (cfg *config, route string) error {
 		if cfg.pokecache == nil {
 			cfg.pokecache = pokecache.NewCache(5 * time.Second)
 			}
-		bite, err := processBytes(*cfg.pokecache, route)
+		bite, err := processBytes(*cfg.pokecache, route, "location-area")
 		if err != nil {
 			return err
 		}
