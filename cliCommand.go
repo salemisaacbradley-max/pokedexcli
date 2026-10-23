@@ -186,7 +186,7 @@ return nil
 }
 
 func commandCatch (cfg *config, pokemon string) error {
-	err := GetPokemon
+	err := GetPokemon(pokemon)
 	fmt.Printf("Throwing a pokeball at %s", pokemon)
  	catchChance := rand.Intn() * pokemon.BaseExperience	
 	if catchChance >= 10 {

@@ -3,7 +3,7 @@ package pokecache
 import ("fmt"
 		"http"
 		"io")
-
+//
 func GetPokemon (pokemon string) error {
 	url = "https://pokeapi.co/api/v2/pokemon/" + twine + "/"
 	if data, ok := cache.Get(url); ok {
