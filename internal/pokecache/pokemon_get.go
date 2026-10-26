@@ -3,8 +3,8 @@ package pokecache
 import ("fmt"
 		"http"
 		"io")
-//
-func GetPokemon (pokemon string) error {
+//Retrieve Data coresponding to the Pokemon entered
+func GetPokemon (pokemon string) (Pokemon{}, error) {
 	url = "https://pokeapi.co/api/v2/pokemon/" + twine + "/"
 	if data, ok := cache.Get(url); ok {
 		return data, nil
