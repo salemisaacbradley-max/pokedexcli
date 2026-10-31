@@ -1,3 +1,3 @@
-package pokecache
+//package pokecache
 
-struct 
+//struct 

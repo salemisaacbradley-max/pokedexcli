@@ -6,7 +6,7 @@ import ("fmt"
 		"net/http"
 		"encoding/json"
 		"github.com/salemisaacbradley-max/pokedexcli/internal/pokecache"
-		"github.com/salemisaacbradley-max/pokedexcli/internal/pokemon_get"
+		
 		"time"
 		"strings"
 		"math/rand")

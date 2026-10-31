@@ -1,8 +1,6 @@
 package pokecache
 
-import ("fmt"
-		"http"
-		"io")
+
 //Retrieve Data coresponding to the Pokemon entered
 func GetPokemon (pokemon string) (Pokemon{}, error) {
 	url = "https://pokeapi.co/api/v2/pokemon/" + twine + "/"
