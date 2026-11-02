@@ -2,26 +2,38 @@ package pokecache
 
 import ("fmt"
 		"io"
-		"net/http")
+		"net/http"
+		"encoding/json"
+		)
 //Retrieve Data coresponding to the Pokemon entered
-func GetPokemon (pokemon string) (Pokemon, error) {
+func GetPokemon (cache Cache, pokemon string) (Pokemon, error) {
 	url := "https://pokeapi.co/api/v2/pokemon/" + pokemon + "/"
 	if data, ok := cache.Get(url); ok {
-		return data, nil
+		pokemonData := Pokemon{}
+		err := json.Unmarshal(data, &pokemonData)
+		if err != nil {
+			return Pokemon{}, fmt.Errorf("Error: %v", err)
+		}
+		return pokemonData, nil
 	}
 	res, err := http.Get(url)
 	if err != nil {
-		return nil, fmt.Errorf("Error with Map Response: %v\n", err)
+		return Pokemon{}, fmt.Errorf("Error with Map Response: %v\n", err)
 	}
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
-		return nil, fmt.Errorf("Error retrieving body: %v\n", err)
+		return Pokemon{}, fmt.Errorf("Error retrieving body: %v\n", err)
 	}
 	res.Body.Close()
 	if res.StatusCode > 299 {
-		return nil, fmt.Errorf("Unexpected Response Code: %v\n", res.StatusCode)
+		return Pokemon{}, fmt.Errorf("Unexpected Response Code: %v\n", res.StatusCode)
 	}
-	return data, nil
+	pokemonData := Pokemon{}
+	err = json.Unmarshal(data, &pokemonData)
+	if err != nil {
+		return Pokemon{}, fmt.Errorf("Error: %v", err)
+	}
+	return pokemonData, nil
 }
 
 type Pokemon struct {

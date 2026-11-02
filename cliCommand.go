@@ -6,7 +6,7 @@ import ("fmt"
 		"net/http"
 		"encoding/json"
 		"github.com/salemisaacbradley-max/pokedexcli/internal/pokecache"
-		
+		//"github.com/salemisaacbradley-max/pokedexcli/internal/pokemon_get"
 		"time"
 		"strings"
 		"math/rand")
@@ -73,6 +73,7 @@ type config struct {
 	previousLocationURL *string
 	nextLocationURL *string
 	pokecache *pokecache.Cache
+	caughtPokemon map[string]pokeapi.Pokemon
 }
 
 type Location struct {
@@ -185,21 +186,20 @@ func commandExplore (cfg *config, route string) error {
 return nil
 }
 
-func commandCatch (cfg *config, pokemon string) error {
-	pokemonData, err := GetPokemon(pokemon)
+func commandCatch (cfg *config, pokemon string, caught cfg.caughtPokemon) error {
+	pokemonData, err := cfg.GetPokemon(pokemon)
 	if err != nil {
 		return err
 	}
 	fmt.Printf("Throwing a pokeball at %s", pokemon)
-	pokemonCaught := map[string]Pokemon
- 	catchChance := rand.Intn(1, 5) * pokemonData.BaseExperience	
-	if catchChance >= 2000 {
-		Printf("%s was caught", pokemon)
-		
+ 	catchChance := rand.Intn(5) * pokemonData.BaseExperience	
+	if catchChance <= 2000 {
+		fmt.Printf("%s was caught", pokemon)
+		caught[pokemon] = pokemonData
 	} else {
 		fmt.Println("But it escaped")
 	}
-	
+	return nil
 }
 
 

@@ -5,6 +5,7 @@ import ("time"
 
 func main() {
 	cfg := config{commands: commands, 
-				pokecache: pokecache.NewCache(5*time.Second),}
+				pokecache: pokecache.NewCache(5*time.Second),
+				caughtPokemon: map[string]pokeapi.Pokemon }
 	REPL(&cfg)
 }
