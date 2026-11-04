@@ -56,6 +56,16 @@ func initCommands() {
 		description:"Has a chance to catch the pokemon",
 		callback:	commandCatch,
 	},
+		"inspect": {
+		name:		"inspect",
+		description:"Views the caught Pokemon's details",
+		callback:	commandInspect,
+	},
+		"pokedex": {
+		name:		"pokedex",
+		description:"Lists the Pokemon in caughtPokemon",
+		callback:	commandPokedex,
+	},
     }
 }
 
@@ -193,7 +203,7 @@ func commandCatch (cfg *config, pokemon string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Throwing a pokeball at %s\n", pokemon)
+	fmt.Printf("Throwing a Pokeball at %s...\n", pokemon)
  	catchChance := rand.Intn(5) * pokemonData.BaseExperience	
 	if catchChance <= 2000 {
 		fmt.Printf("%s was caught \n", pokemon)
@@ -287,6 +297,33 @@ func GetPokemon (cfg *config, pokemon string) (Pokemon, error) {
 		return Pokemon{}, fmt.Errorf("Error: %v", err)
 	}
 	return pokemonData, nil
+}
+
+func commandInspect (cfg *config, pokemon string) error {
+	caughtMon, ok := cfg.caughtPokemon[pokemon]
+	if !ok {
+		fmt.Println("User has not caught that pokemon")
+	} else {
+		fmt.Printf("Name: %s\n", caughtMon.Name)
+		fmt.Printf("Height: %d\n", caughtMon.Height)
+		fmt.Printf("Weight: %d\n", caughtMon.Weight)
+		fmt.Println("Stats:\n")
+		for _, stat := range caughtMon.Stats {
+			fmt.Printf("	%s: %d\n", stat.Stat.Name, stat.BaseStat)
+		}
+		fmt.Println("Types:")
+		for _, i := range caughtMon.Types {
+			fmt.Printf("-%s\n", i.Type.Name)
+		}
+	}
+	return nil
+}
+
+func commandPokedex (cfg *config, unused string) error {
+	for name := range cfg.caughtPokemon {
+		fmt.Printf("%s\n", name)
+	}
+	return nil
 }
 
 type Pokemon struct {
