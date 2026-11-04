@@ -18,7 +18,7 @@ func REPL(cfg *config) {
 		fmt.Print("Pokedex > ")
 		result := scanner.Scan()
 		if result != true {
-			fmt.Errorf("Hey, dingbat. Write something next time.")
+			fmt.Println("Hey, dingbat. Write something next time.")
 		}
 		scanned := scanner.Text()
 		cleaned := cleanInput(scanned)
@@ -31,7 +31,10 @@ func REPL(cfg *config) {
 			confirmed = cleaned[1]
 		}
 		if ok == true {
-			command.callback(cfg, confirmed)
+			err := command.callback(cfg, confirmed)
+			if err != nil {
+    			fmt.Println(err)
+			}
 		} else {
 			fmt.Print("Unknown Command\n")
 		}

@@ -1,11 +1,11 @@
 package main
 import ("time"
-		"github.com/salemisaacbradley-max/pokedexcli/internal/pokecache")
+		"github.com/salemisaacbradley-max/pokedexcli/internal/pokeapi")
 
 
 func main() {
 	cfg := config{commands: commands, 
-				pokecache: pokecache.NewCache(5*time.Second),
-				caughtPokemon: map[string]pokeapi.Pokemon }
+				pokecache: pokeapi.NewCache(5*time.Second),
+				caughtPokemon: make(map[string]Pokemon) }
 	REPL(&cfg)
 }
